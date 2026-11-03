@@ -448,7 +448,7 @@ kbd{font:700 11px/1 var(--f-txt);border:1.5px solid currentColor;border-radius:5
       <circle cx="26" cy="10" r="8" fill="#c0392b"/><circle cx="-4" cy="-28" r="8" fill="#3f8f4a"/><circle cx="-24" cy="14" r="8" fill="#3a6fb0"/>
       <g fill="#fff" font-size="9" font-weight="700" text-anchor="middle" font-family="sans-serif"><text x="26" y="13">X</text><text x="-4" y="-25">Y</text><text x="-24" y="17">Z</text></g></svg>
     <div class="vp-hint">Arraste para girar · role para aproximar</div>
-    <div class="vp-render"><span id="r-count">Amostra 0/128</span><span class="rb"><i id="r-bar"></i></span></div>
+    <div class="vp-render"><span id="r-count">Formando a imagem 0%</span><span class="rb"><i id="r-bar"></i></span></div>
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
     <div id="result" class="result" hidden>
       <div class="res-card">
@@ -461,13 +461,13 @@ kbd{font:700 11px/1 var(--f-txt);border:1.5px solid currentColor;border-radius:5
             <dt>Peças</dt><dd id="rs-p"></dd><dt>Vértices</dt><dd id="rs-v"></dd>
             <dt>Cor</dt><dd id="rs-c"></dd><dt>Acabamento</dt><dd id="rs-f"></dd><dt>Sol</dt><dd id="rs-l"></dd>
           </dl>
-          <div class="res-act"><button type="button" id="res-again" class="btn fill">Fazer outro</button><button type="button" id="res-close" class="btn">Girar o meu</button></div>
+          <div class="res-act"><button type="button" id="res-again" class="btn fill">Montar outro</button><button type="button" id="res-close" class="btn">Ver em 3D</button></div>
           <a id="res-link" class="res-real" href="#"><img id="res-real" alt=""><span><b>Veja o projeto real</b>
-            O <span id="res-what"></span> desenvolvido para a <span id="res-who"></span> →</span></a>
+            O <span id="res-what"></span> que a Vanessa fez para a <span id="res-who"></span> →</span></a>
         </div>
       </div>
     </div>
-    <div class="nogl-msg">O estúdio 3D precisa de WebGL. Role a página para ver os projetos.</div>
+    <div class="nogl-msg">Seu navegador não abre o estúdio 3D. Role a página para ver os projetos.</div>
   </div>
   <aside class="s-panel">
     <div class="mission">
@@ -477,7 +477,7 @@ kbd{font:700 11px/1 var(--f-txt);border:1.5px solid currentColor;border-radius:5
       <button type="button" id="btn-next" class="btn fill sm" hidden>Próxima etapa →</button>
     </div>
     <div class="panel-sec" data-for="0">
-      <button type="button" id="btn-extrude" class="big">Extrudar peça <kbd>E</kbd></button>
+      <button type="button" id="btn-extrude" class="big">Criar peça <kbd>E</kbd></button>
       <span class="lbl">Cena</span><ul id="outliner" class="outliner"></ul>
     </div>
     <div class="panel-sec" data-for="1" hidden>
@@ -849,10 +849,10 @@ document.querySelectorAll('[data-copy]').forEach(b=>b.addEventListener('click',(
 
   // ---------- missões ----------
   const STEPS = [
-    { k: 'Modelagem', t: 'Modele o produto', d: () => MOBILE ? `Toque em <b>Extrudar</b> para criar cada peça do ${MODELS[S.model].name.toLowerCase()}.` : `Clique em <b>Extrudar</b> (ou aperte <kbd>E</kbd>) para criar cada peça do ${MODELS[S.model].name.toLowerCase()}.`, shade: 'malha' },
-    { k: 'Textura', t: 'Escolha o material', d: () => 'Pinte o produto com uma cor e um acabamento. É aqui que entra o PBR.', shade: 'material' },
-    { k: 'Luz', t: 'Ilumine a cena', d: () => 'Arraste o sol para mudar a hora do dia e o desenho da sombra.', shade: 'material' },
-    { k: 'Render', t: 'Renderize', d: () => MOBILE ? 'Toque em <b>Renderizar</b> e veja a imagem final.' : 'Aperte <b>Renderizar</b> (ou <kbd>F12</kbd>) e veja a imagem final.', shade: 'render' },
+    { k: 'Modelagem', t: 'Modele o produto', d: () => MOBILE ? `Toque em <b>Criar peça</b> para montar cada parte do ${MODELS[S.model].name.toLowerCase()}.` : `Clique em <b>Criar peça</b> (ou aperte <kbd>E</kbd>) para montar cada parte do ${MODELS[S.model].name.toLowerCase()}.`, shade: 'malha' },
+    { k: 'Textura', t: 'Escolha o material', d: () => 'Escolha a cor e o acabamento, como no material de verdade.', shade: 'material' },
+    { k: 'Luz', t: 'Ilumine a cena', d: () => 'Mude a hora do dia e veja a luz e a sombra mudarem junto.', shade: 'material' },
+    { k: 'Render', t: 'Gere a imagem final', d: () => MOBILE ? 'Toque em <b>Renderizar</b> e veja a foto do produto se formar.' : 'Aperte <b>Renderizar</b> (ou <kbd>F12</kbd>) e veja a foto do produto se formar.', shade: 'render' },
   ];
   function goStep(i) {
     if (i > 0 && S.built < parts.length) { while (S.built < parts.length) extrude(); }
@@ -869,7 +869,7 @@ document.querySelectorAll('[data-copy]').forEach(b=>b.addEventListener('click',(
   function complete(i) {
     if (S.done[i]) return; S.done[i] = true;
     const b = $$('.badge')[i]; b.classList.add('got');
-    toast(['Modelagem concluída!', 'Material aplicado!', 'Luz no ponto!', 'Render pronto!'][i]);
+    toast(['Modelo pronto!', 'Material aplicado!', 'Luz ajustada!', 'Imagem pronta!'][i]);
     updateMission();
   }
   let tt; function toast(t) { const e = $('#toast'); e.textContent = t; e.classList.add('show'); clearTimeout(tt); tt = setTimeout(() => e.classList.remove('show'), 1800); }
@@ -885,7 +885,7 @@ document.querySelectorAll('[data-copy]').forEach(b=>b.addEventListener('click',(
     const total = 128, t0 = performance.now(), dur = 2600;
     (function tick(now) {
       const k = Math.min((now - t0) / dur, 1), samples = Math.max(1, Math.round(k * k * total));
-      $('#r-count').textContent = `Amostra ${samples}/${total}`; $('#r-bar').style.width = (k * 100) + '%';
+      $('#r-count').textContent = `Formando a imagem ${Math.round(k * 100)}%`; $('#r-bar').style.width = (k * 100) + '%';
       const w = noise.width = Math.round(vpEl.clientWidth / 3), h = noise.height = Math.round(vpEl.clientHeight / 3);
       const img = nctx.createImageData(w, h), a = Math.round(230 * (1 - k) ** 1.6);
       for (let i = 0; i < img.data.length; i += 4) { const v = Math.random() * 255; img.data[i] = img.data[i + 1] = img.data[i + 2] = v; img.data[i + 3] = a; }
