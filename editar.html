@@ -3,7 +3,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex">
-<title>Editar tags · Portfólio Vanessa Usó</title>
+<title>Links e tags · Portfólio Vanessa Usó</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&display=swap">
 <style>
 :root{--creme:#FAF3E1;--vinho:#53010F;--azul:#BCE1FE}
@@ -30,9 +30,22 @@ input[type=checkbox]{width:20px;height:20px;accent-color:var(--vinho);cursor:poi
 .btn.fill{background:var(--vinho);color:var(--creme)}
 .save{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-top:24px}
 .msg{font-weight:700}
+.gen{display:grid;gap:14px;background:#fff;border:1.5px solid var(--vinho);border-radius:16px;padding:18px;margin-bottom:10px}
+.gen .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.gen .row b{min-width:120px;font-size:12px;letter-spacing:.1em;text-transform:uppercase}
+.gt{border:1.5px solid var(--vinho);background:none;color:var(--vinho);border-radius:99px;padding:8px 13px;font:700 13px/1 inherit;cursor:pointer}
+.gt[aria-pressed=true]{background:var(--vinho);color:var(--creme)}
+.gt sup{font-size:10px;margin-left:4px;opacity:.7}
+.out{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.out input{flex:1;min-width:260px;border:1.5px solid var(--vinho);border-radius:99px;padding:11px 16px;font:600 14px/1 inherit;color:inherit;background:var(--creme)}
+.hint{font-size:13px;opacity:.8}
+@media (max-width:640px){.gen .row b{min-width:100%}.out input{min-width:0;width:100%}}
 </style>
 <main>
-  <h1>Tags dos projetos</h1>
+  <h1>Links por tag</h1>
+  <p class="lead">Marque uma ou mais tags e copie o link. Quem abrir vê o portfólio com só os projetos daquela seleção.</p>
+  <div class="gen" id="gen"></div>
+  <h1 style="margin-top:48px">Tags dos projetos</h1>
   <p class="lead">Marque as tags de cada projeto, crie tags novas ou mude o nome das que já existem. Os filtros do portfólio usam exatamente o que estiver aqui.</p>
   <div class="steps"><b>Como salvar</b>
     <ol><li>Faça as mudanças na tabela.</li>
@@ -45,7 +58,13 @@ input[type=checkbox]{width:20px;height:20px;accent-color:var(--vinho);cursor:poi
 </main>
 <script>
 const NOMES={madeira:'Madeira Madeira',electrolux:'Electrolux',havaianas:'Havaianas',amvox:'Amvox',ar:'AR em escala',tractian:'Tractian',configuradores:'Configuradores',rosset:'Rosset · Valisere · Sloggi'};
-let D;
+let D;const SEL=new Set();const BASE=location.href.replace(/editar(\.html)?.*$/,'');
+const slug=t=>t.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+function gen(){const tags=[...SEL];const n=Object.values(D.projetos).filter(L=>tags.every(t=>L.includes(t))).length;
+  const link=!tags.length?BASE:tags.length===1?BASE+slug(tags[0]):BASE+'?tags='+tags.map(slug).join(',');
+  document.getElementById('gen').innerHTML=D.grupos.map(g=>`<div class="row"><b>${esc(g.nome)}</b>${g.tags.map(t=>{const k=Object.values(D.projetos).filter(L=>L.includes(t)).length;return `<button type="button" class="gt" data-gt="${esc(t)}" aria-pressed="${SEL.has(t)}">${esc(t)}<sup>${k}</sup></button>`}).join('')}</div>`).join('')
+   +`<div class="out"><input id="lk" readonly value="${esc(link)}" aria-label="Link gerado"><button class="btn fill" id="cp" type="button">Copiar link</button><a class="btn" href="${esc(link)}" target="_blank" rel="noopener">Abrir</a></div>
+   <span class="hint">${tags.length?`${n} ${n===1?'projeto aparece':'projetos aparecem'} nesse link.`:'Sem tag marcada, o link abre o portfólio completo.'}${n===0&&tags.length?' Nenhum projeto tem todas essas tags juntas.':''}</span>`}
 const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function draw(){
   const cols=D.grupos.flatMap((g,gi)=>g.tags.map((t,ti)=>({g:gi,t,ti})));
@@ -53,14 +72,16 @@ function draw(){
     cols.map(c=>`<th><div class="tagname"><input value="${esc(c.t)}" data-g="${c.g}" data-i="${c.ti}" aria-label="Nome da tag"><button class="del" type="button" data-g="${c.g}" data-i="${c.ti}">remover</button></div></th>`).join('')+'</tr></thead><tbody>';
   for(const slug of Object.keys(D.projetos)){h+=`<tr><td><b>${esc(NOMES[slug]||slug)}</b></td>`+cols.map(c=>`<td><input type="checkbox" data-p="${slug}" data-t="${esc(c.t)}" ${D.projetos[slug].includes(c.t)?'checked':''} aria-label="${esc(NOMES[slug]||slug)}: ${esc(c.t)}"></td>`).join('')+'</tr>'}
   document.getElementById('t').innerHTML=h+'</tbody>';
-  document.getElementById('g').innerHTML=D.grupos.map((g,i)=>`<option value="${i}">${esc(g.nome)}</option>`).join('');
+  gen();document.getElementById('g').innerHTML=D.grupos.map((g,i)=>`<option value="${i}">${esc(g.nome)}</option>`).join('');
 }
 const say=t=>{const m=document.getElementById('m');m.textContent=t;setTimeout(()=>m.textContent='',3000)};
 document.addEventListener('change',e=>{const x=e.target;
   if(x.type==='checkbox'){const L=D.projetos[x.dataset.p];x.checked?L.push(x.dataset.t):L.splice(L.indexOf(x.dataset.t),1)}
   else if(x.dataset.g!==undefined&&x.tagName==='INPUT'){const g=D.grupos[x.dataset.g],old=g.tags[x.dataset.i],nv=x.value.trim();if(!nv){x.value=old;return}
     g.tags[x.dataset.i]=nv;for(const p in D.projetos)D.projetos[p]=D.projetos[p].map(t=>t===old?nv:t);draw()}});
-document.addEventListener('click',e=>{const b=e.target;
+document.addEventListener('click',e=>{const b=e.target.closest('button')||e.target;
+  if(b.dataset&&b.dataset.gt){SEL.has(b.dataset.gt)?SEL.delete(b.dataset.gt):SEL.add(b.dataset.gt);gen();return}
+  if(b.id==='cp'){const v=document.getElementById('lk').value;const ok=()=>say('Link copiado.');(navigator.clipboard?navigator.clipboard.writeText(v).then(ok).catch(()=>{document.getElementById('lk').select();say('Selecionei o link: é só copiar.')}):(document.getElementById('lk').select(),say('Selecionei o link: é só copiar.')));return}
   if(b.classList.contains('del')){const g=D.grupos[b.dataset.g],t=g.tags[b.dataset.i];g.tags.splice(b.dataset.i,1);for(const p in D.projetos)D.projetos[p]=D.projetos[p].filter(x=>x!==t);draw();say(`Tag "${t}" removida.`)}
   if(b.id==='a'){const n=document.getElementById('n').value.trim();if(!n)return say('Escreva o nome da tag.');const g=D.grupos[document.getElementById('g').value];
     if(D.grupos.some(x=>x.tags.includes(n)))return say('Essa tag já existe.');g.tags.push(n);document.getElementById('n').value='';draw();say(`Tag "${n}" criada. Agora marque os projetos.`)}
