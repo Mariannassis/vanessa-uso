@@ -259,13 +259,13 @@ h1.disp,section h2.disp{--fs:1em}
   @keyframes fadein{from{transform:translateY(30px)}}
   @supports (animation-timeline:view()){
     .rv{animation:rv linear both;animation-timeline:view();animation-range:entry 0% cover 28%}
-    @keyframes rv{from{opacity:0;transform:translateY(60px) scale(.97)}}
+    @keyframes rv{from{transform:translateY(60px) scale(.97)}}
     .rv-x{animation:rvx linear both;animation-timeline:view();animation-range:entry 0% cover 35%}
-    @keyframes rvx{from{opacity:0;transform:translateX(-80px) rotate(-3deg)}}
+    @keyframes rvx{from{transform:translateX(-80px) rotate(-3deg)}}
     .par{animation:par linear both;animation-timeline:view();animation-range:cover 0% cover 100%}
     @keyframes par{from{transform:translateY(-6%) scale(1.12)}to{transform:translateY(6%) scale(1.12)}}
     .flip>.in,.flip>.marq,.flip>.ticker{transform-origin:50% 0;animation:flip linear both;animation-timeline:view();animation-range:entry 0% cover 40%}
-    @keyframes flip{from{transform:perspective(1600px) rotateX(-34deg) translateY(90px);opacity:.25}}
+    @keyframes flip{from{transform:perspective(1600px) rotateX(-34deg) translateY(90px)}}
   }
 }
 @media (prefers-reduced-motion:reduce){.marq .track,.ticker span{animation:none}}
