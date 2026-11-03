@@ -475,10 +475,10 @@ kbd{font:700 11px/1 var(--f-txt);border:1.5px solid currentColor;border-radius:5
       <span class="eye" id="m-k">Etapa 1 de 4</span>
       <h2 id="m-t">Modele o produto</h2>
       <p id="m-d"></p>
-      <button type="button" id="btn-next" class="btn fill sm" hidden>Próxima etapa →</button>
+      <button type="button" id="btn-next" class="btn fill sm" hidden>Ir para Textura →</button>
     </div>
     <div class="panel-sec" data-for="0">
-      <button type="button" id="btn-extrude" class="big">Criar peça <kbd>E</kbd></button>
+      <button type="button" id="btn-extrude" class="big">Adicionar peça <kbd>E</kbd></button>
       <span class="lbl">Cena</span><ul id="outliner" class="outliner"></ul>
     </div>
     <div class="panel-sec" data-for="1" hidden>
@@ -850,7 +850,7 @@ document.querySelectorAll('[data-copy]').forEach(b=>b.addEventListener('click',(
 
   // ---------- missões ----------
   const STEPS = [
-    { k: 'Modelagem', t: 'Modele o produto', d: () => MOBILE ? `Toque em <b>Criar peça</b> para montar cada parte do ${MODELS[S.model].name.toLowerCase()}.` : `Clique em <b>Criar peça</b> (ou aperte <kbd>E</kbd>) para montar cada parte do ${MODELS[S.model].name.toLowerCase()}.`, shade: 'malha' },
+    { k: 'Modelagem', t: 'Modele o produto', d: () => MOBILE ? `Toque em <b>Adicionar peça</b> para montar cada parte do ${MODELS[S.model].name.toLowerCase()}.` : `Clique em <b>Adicionar peça</b> (ou aperte <kbd>E</kbd>) para montar cada parte do ${MODELS[S.model].name.toLowerCase()}.`, shade: 'malha' },
     { k: 'Textura', t: 'Escolha o material', d: () => 'Escolha a cor e o acabamento, como no material de verdade.', shade: 'material' },
     { k: 'Luz', t: 'Ilumine a cena', d: () => 'Mude a hora do dia e veja a luz e a sombra mudarem junto.', shade: 'material' },
     { k: 'Render', t: 'Gere a imagem final', d: () => MOBILE ? 'Toque em <b>Renderizar</b> e veja a foto do produto se formar.' : 'Aperte <b>Renderizar</b> (ou <kbd>F12</kbd>) e veja a foto do produto se formar.', shade: 'render' },
@@ -866,6 +866,7 @@ document.querySelectorAll('[data-copy]').forEach(b=>b.addEventListener('click',(
     const st = STEPS[S.step];
     $('#m-k').textContent = `Etapa ${S.step + 1} de 4 · ${st.k}`; $('#m-t').textContent = st.t; $('#m-d').innerHTML = st.d();
     $('#btn-next').hidden = !(S.done[S.step] && S.step < 3);
+    if (S.step < 3) $('#btn-next').textContent = `Ir para ${STEPS[S.step + 1].k} →`;
   }
   function complete(i) {
     if (S.done[i]) return; S.done[i] = true;
