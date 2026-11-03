@@ -208,12 +208,7 @@ h1.disp,section h2.disp{--fs:1em}
 .sticker.drag.grab{cursor:grabbing;--s:1.14;transition:none;filter:drop-shadow(6px 10px 0 rgba(42,0,7,.22))}
 .drag-hint{position:absolute;right:0;top:-34px;font:700 11px/1 var(--f-txt);letter-spacing:.12em;text-transform:uppercase;opacity:.7}
 .tl li{opacity:1}
-@media (prefers-reduced-motion:no-preference){
-  .tl.arm li{opacity:0;transform:translateY(24px)}
-  .tl.arm.go li{animation:tlin .55s cubic-bezier(.2,.9,.3,1.2) forwards}
-  .tl.arm.go li:nth-child(2){animation-delay:.12s}.tl.arm.go li:nth-child(3){animation-delay:.24s}.tl.arm.go li:nth-child(4){animation-delay:.36s}
-  @keyframes tlin{to{opacity:1;transform:none}}
-}
+
 @media (prefers-reduced-motion:no-preference){
   @supports (animation-timeline:view()){
     .bigname{animation:slide linear both;animation-timeline:view();animation-range:cover 0% cover 100%}
@@ -416,7 +411,6 @@ document.querySelectorAll('.bio-pic').forEach(box=>{const me=box.querySelector('
   function close(){lb.remove();document.documentElement.style.overflow='';last&&last.focus&&last.focus()}
   addEventListener('keydown',e=>{if(!lb||!lb.isConnected)return;if(e.key==='Escape')close();if(e.key==='ArrowRight')go(1);if(e.key==='ArrowLeft')go(-1)});
 })();
-document.querySelectorAll('.tl').forEach(t=>{t.classList.add('arm');new IntersectionObserver((es,o)=>{if(es[0].isIntersecting){t.classList.add('go');o.disconnect()}},{threshold:.2}).observe(t)});
 document.querySelectorAll('.car').forEach(c=>{const t=c.querySelector('.car-track');c.querySelectorAll('.car-b').forEach(b=>b.addEventListener('click',()=>t.scrollBy({left:(b.classList.contains('next')?1:-1)*t.clientWidth*.8,behavior:'smooth'})))});
 document.querySelectorAll('.cmp input').forEach(r=>{const set=()=>r.parentElement.style.setProperty('--x',r.value+'%');r.addEventListener('input',set);set()});
 document.querySelectorAll('[data-copy]').forEach(b=>b.addEventListener('click',()=>{const t=b.dataset.copy;const done=()=>{const o=b.textContent;b.textContent='E-mail copiado';setTimeout(()=>b.textContent=o,1800)};
