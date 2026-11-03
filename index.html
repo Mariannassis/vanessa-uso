@@ -456,7 +456,6 @@ kbd{font:700 11px/1 var(--f-txt);border:1.5px solid currentColor;border-radius:5
           <span class="res-stamp"><x-a n="monograma"></x-a></span>
           <x-a n="selo-aprovado" class="res-badge"></x-a></div>
         <div class="res-info">
-          <span class="eye">Render concluído · <span id="res-date"></span></span>
           <h3>Seu <span id="res-name">sofá</span> está pronto.</h3>
           <dl class="res-spec">
             <dt>Peças</dt><dd id="rs-p"></dd><dt>Vértices</dt><dd id="rs-v"></dd>
@@ -517,7 +516,7 @@ kbd{font:700 11px/1 var(--f-txt);border:1.5px solid currentColor;border-radius:5
     </ol>
     <div class="pills"><span class="pill">Blender</span><span class="pill">Substance Painter</span><span class="pill">Adobe</span><span class="pill">SolidWorks</span><span class="pill">Português</span><span class="pill">Inglês</span><span class="pill">Espanhol</span></div>
   </div>
-  <div class="bio-pic"><span class="drag-hint">Arraste os adesivos</span>
+  <div class="bio-pic">
     <div class="me"><img src="webimg/vanessa.webp" alt="Retrato da Vanessa Usó sorrindo"></div>
     <x-a n="ideia" class="sticker drag" style="width:34%;right:-6%;bottom:-6%;--r:9deg"></x-a><x-a n="selo-3d" class="sticker drag" style="width:30%;left:-12%;bottom:18%;--r:-8deg"></x-a>
     <x-a n="lapis" class="sticker drag" style="width:28%;left:-10%;top:-8%;--r:-12deg"></x-a><x-a n="paleta" class="sticker drag" style="width:26%;right:-8%;top:6%;--r:10deg"></x-a>
@@ -902,7 +901,6 @@ document.querySelectorAll('[data-copy]').forEach(b=>b.addEventListener('click',(
     $('#res-mine').src = shot; $('#res-name').textContent = M.name.toLowerCase();
     $('#rs-p').textContent = parts.length; $('#rs-v').textContent = $('#st-v').textContent;
     $('#rs-c').textContent = sw[0]; $('#rs-f').textContent = M.finishes[S.finish][0]; $('#rs-l').textContent = hora;
-    $('#res-date').textContent = new Date().toLocaleDateString('pt-BR');
     $('#res-real').src = M.img; $('#res-who').textContent = M.who; $('#res-what').textContent = S.model === 'sofa' ? 'sofá' : 'chinelo';
     $('#res-link').href = window.__URLS[M.project];
     $('#result').hidden = false;
