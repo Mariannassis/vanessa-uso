@@ -1,0 +1,16 @@
+{
+  "grupos": [
+    {"id": "fiz", "nome": "O que eu fiz", "tags": ["Modelagem 3D", "Texturização", "Otimização", "Render e iluminação", "Desenvolvimento de produto", "Prototipagem e impressão 3D"]},
+    {"id": "uso", "nome": "Onde é usado", "tags": ["E-commerce", "Realidade aumentada", "Configurador", "Real-time", "Varejo e embalagem"]}
+  ],
+  "projetos": {
+    "madeira": ["Modelagem 3D", "Texturização", "Render e iluminação", "E-commerce"],
+    "electrolux": ["Otimização", "Texturização", "Real-time", "Realidade aumentada"],
+    "havaianas": ["Modelagem 3D", "Texturização", "Render e iluminação", "E-commerce"],
+    "amvox": ["Modelagem 3D", "Texturização", "Otimização", "Realidade aumentada"],
+    "ar": ["Modelagem 3D", "Texturização", "Otimização", "Realidade aumentada", "Real-time", "E-commerce"],
+    "tractian": ["Modelagem 3D", "Desenvolvimento de produto", "Render e iluminação"],
+    "configuradores": ["Modelagem 3D", "Otimização", "Configurador", "Real-time"],
+    "rosset": ["Modelagem 3D", "Render e iluminação", "Varejo e embalagem"]
+  }
+}

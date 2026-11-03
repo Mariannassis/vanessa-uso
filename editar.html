@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="pt-BR">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Editar tags · Portfólio Vanessa Usó</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&display=swap">
+<style>
+:root{--creme:#FAF3E1;--vinho:#53010F;--azul:#BCE1FE}
+*{box-sizing:border-box}
+body{margin:0;background:var(--creme);color:var(--vinho);font:400 15px/1.5 'Bricolage Grotesque',system-ui,sans-serif}
+main{max-width:1180px;margin:0 auto;padding:32px max(16px,env(safe-area-inset-left,0px)) 80px}
+h1{font:800 34px/1.05 'Bricolage Grotesque',sans-serif;margin:0 0 6px}
+.lead{max-width:64ch;margin:0 0 24px}
+.steps{background:var(--azul);border-radius:16px;padding:16px 20px;margin:0 0 28px;display:grid;gap:6px}
+.steps ol{margin:0;padding-left:20px}
+.wrap{overflow-x:auto;border:1.5px solid var(--vinho);border-radius:16px;background:#fff}
+table{border-collapse:collapse;width:100%;min-width:820px}
+th,td{padding:10px 12px;border-bottom:1px solid rgba(83,1,15,.15);text-align:center;vertical-align:middle}
+th:first-child,td:first-child{text-align:left;position:sticky;left:0;background:#fff;z-index:1;min-width:190px}
+thead th{font-size:12px;font-weight:700;vertical-align:bottom}
+thead tr.g th{background:var(--vinho);color:var(--creme);font-size:11px;letter-spacing:.12em;text-transform:uppercase}
+.tagname{display:flex;flex-direction:column;align-items:center;gap:6px}
+.tagname input{width:130px;border:1.5px solid rgba(83,1,15,.3);border-radius:8px;padding:6px 8px;font:700 12px/1.2 inherit;color:inherit;text-align:center;background:var(--creme)}
+.del{border:0;background:none;color:var(--vinho);font:700 11px/1 inherit;text-decoration:underline;cursor:pointer;opacity:.7}
+input[type=checkbox]{width:20px;height:20px;accent-color:var(--vinho);cursor:pointer}
+.add{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0}
+.add select,.add input{border:1.5px solid var(--vinho);border-radius:99px;padding:10px 14px;font:600 14px/1 inherit;color:inherit;background:#fff}
+.btn{border:1.5px solid var(--vinho);border-radius:99px;padding:11px 18px;font:700 14px/1 inherit;color:var(--vinho);background:none;cursor:pointer}
+.btn.fill{background:var(--vinho);color:var(--creme)}
+.save{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-top:24px}
+.msg{font-weight:700}
+</style>
+<main>
+  <h1>Tags dos projetos</h1>
+  <p class="lead">Marque as tags de cada projeto, crie tags novas ou mude o nome das que já existem. Os filtros do portfólio usam exatamente o que estiver aqui.</p>
+  <div class="steps"><b>Como salvar</b>
+    <ol><li>Faça as mudanças na tabela.</li>
+      <li>Clique em <b>Baixar arquivo</b>. Vai baixar o <code>projetos.json</code>.</li>
+      <li>Abra a pasta <b>data</b> do repositório no GitHub, clique em <b>Add file › Upload files</b>, solte o arquivo e confirme em <b>Commit changes</b>.</li>
+      <li>Em um ou dois minutos o portfólio já mostra as tags novas.</li></ol></div>
+  <div class="wrap"><table id="t"></table></div>
+  <div class="add"><select id="g" aria-label="Grupo da tag nova"></select><input id="n" placeholder="Nome da tag nova" aria-label="Nome da tag nova"><button class="btn" id="a" type="button">Adicionar tag</button></div>
+  <div class="save"><button class="btn fill" id="dl" type="button">Baixar arquivo</button><a class="btn" id="gh" href="https://github.com/Mariannassis/vanessa-uso/tree/main/data" target="_blank" rel="noopener">Abrir a pasta no GitHub</a><span class="msg" id="m" role="status"></span></div>
+</main>
+<script>
+const NOMES={madeira:'Madeira Madeira',electrolux:'Electrolux',havaianas:'Havaianas',amvox:'Amvox',ar:'AR em escala',tractian:'Tractian',configuradores:'Configuradores',rosset:'Rosset · Valisere · Sloggi'};
+let D;
+const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function draw(){
+  const cols=D.grupos.flatMap((g,gi)=>g.tags.map((t,ti)=>({g:gi,t,ti})));
+  let h='<thead><tr class="g"><th></th>'+D.grupos.map(g=>`<th colspan="${g.tags.length}">${esc(g.nome)}</th>`).join('')+'</tr><tr><th>Projeto</th>'+
+    cols.map(c=>`<th><div class="tagname"><input value="${esc(c.t)}" data-g="${c.g}" data-i="${c.ti}" aria-label="Nome da tag"><button class="del" type="button" data-g="${c.g}" data-i="${c.ti}">remover</button></div></th>`).join('')+'</tr></thead><tbody>';
+  for(const slug of Object.keys(D.projetos)){h+=`<tr><td><b>${esc(NOMES[slug]||slug)}</b></td>`+cols.map(c=>`<td><input type="checkbox" data-p="${slug}" data-t="${esc(c.t)}" ${D.projetos[slug].includes(c.t)?'checked':''} aria-label="${esc(NOMES[slug]||slug)}: ${esc(c.t)}"></td>`).join('')+'</tr>'}
+  document.getElementById('t').innerHTML=h+'</tbody>';
+  document.getElementById('g').innerHTML=D.grupos.map((g,i)=>`<option value="${i}">${esc(g.nome)}</option>`).join('');
+}
+const say=t=>{const m=document.getElementById('m');m.textContent=t;setTimeout(()=>m.textContent='',3000)};
+document.addEventListener('change',e=>{const x=e.target;
+  if(x.type==='checkbox'){const L=D.projetos[x.dataset.p];x.checked?L.push(x.dataset.t):L.splice(L.indexOf(x.dataset.t),1)}
+  else if(x.dataset.g!==undefined&&x.tagName==='INPUT'){const g=D.grupos[x.dataset.g],old=g.tags[x.dataset.i],nv=x.value.trim();if(!nv){x.value=old;return}
+    g.tags[x.dataset.i]=nv;for(const p in D.projetos)D.projetos[p]=D.projetos[p].map(t=>t===old?nv:t);draw()}});
+document.addEventListener('click',e=>{const b=e.target;
+  if(b.classList.contains('del')){const g=D.grupos[b.dataset.g],t=g.tags[b.dataset.i];g.tags.splice(b.dataset.i,1);for(const p in D.projetos)D.projetos[p]=D.projetos[p].filter(x=>x!==t);draw();say(`Tag "${t}" removida.`)}
+  if(b.id==='a'){const n=document.getElementById('n').value.trim();if(!n)return say('Escreva o nome da tag.');const g=D.grupos[document.getElementById('g').value];
+    if(D.grupos.some(x=>x.tags.includes(n)))return say('Essa tag já existe.');g.tags.push(n);document.getElementById('n').value='';draw();say(`Tag "${n}" criada. Agora marque os projetos.`)}
+  if(b.id==='dl'){const url=URL.createObjectURL(new Blob([JSON.stringify(D,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download='projetos.json';a.click();URL.revokeObjectURL(url);say('Arquivo baixado. Agora suba ele na pasta data do GitHub.')}});
+fetch('data/projetos.json',{cache:'no-store'}).then(r=>r.json()).then(j=>{D=j;draw()}).catch(()=>{document.getElementById('t').innerHTML='<tr><td>Não consegui abrir o arquivo de tags.</td></tr>'});
+</script>
+</html>
