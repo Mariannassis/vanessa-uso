@@ -346,7 +346,8 @@ h1.disp,section h2.disp{--fs:1em}
 .mission h2{font:400 26px/1 var(--f-disp);margin:0}
 .mission p{margin:0;font-size:14px;line-height:1.45}
 kbd{font:700 11px/1 var(--f-txt);border:1.5px solid currentColor;border-radius:5px;padding:2px 5px;margin-left:4px}
-.btn.sm{padding:12px 16px;font-size:14px;justify-self:stretch;text-align:center;background:var(--creme);color:var(--vinho);border-color:var(--creme)}
+.btn.sm{justify-content:center;padding:16px;border-radius:14px;font:700 16px/1 var(--f-txt);letter-spacing:0;background:var(--azul);color:var(--vinho);border:0;box-shadow:4px 5px 0 rgba(0,0,0,.25)}
+.s-panel:has(#btn-next:not([hidden])) .big{background:none;color:var(--creme)!important;box-shadow:none;border:1.5px solid rgba(250,243,225,.3);padding-block:13px}
 .panel-sec{display:grid;gap:10px}
 .lbl{font:700 11px/1 var(--f-txt);letter-spacing:.14em;text-transform:uppercase;opacity:.75;margin-top:4px}
 .big{background:var(--azul);color:var(--vinho)!important;border:0;border-radius:14px;padding:16px;font:700 16px/1 var(--f-txt)!important;box-shadow:4px 5px 0 rgba(0,0,0,.25);transition:transform .15s}
@@ -389,7 +390,7 @@ kbd{font:700 11px/1 var(--f-txt);border:1.5px solid currentColor;border-radius:5
   .mission .eye{grid-column:1/-1;font-size:10px}
   .mission h2{font-size:18px}
   .mission p{grid-column:1/-1;font-size:12px;line-height:1.35}
-  .mission .btn.sm{padding:10px 14px;font-size:13px}
+  .mission .btn.sm{padding:12px;font-size:14px}
   .big{padding:12px;font-size:14px!important}
   .panel-sec{gap:8px}
   .swatches{gap:6px}.swatch span{display:none}.swatch i{max-width:40px}
